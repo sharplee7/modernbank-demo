@@ -1,5 +1,10 @@
 package com.modernbank.transfer.subscriber;
 
+import com.modernbank.transfer.domain.entity.TransferHistory;
+import com.modernbank.transfer.exception.SystemException;
+import com.modernbank.transfer.publisher.TransferProducer;
+import com.modernbank.transfer.rest.account.entity.TransactionHistory;
+import com.modernbank.transfer.service.TransferService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +13,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import com.modernbank.transfer.domain.entity.TransferHistory;
-import com.modernbank.transfer.exception.SystemException;
-import com.modernbank.transfer.publisher.TransferProducer;
-import com.modernbank.transfer.rest.account.entity.TransactionHistory;
-import com.modernbank.transfer.service.TransferService;
-
 import jakarta.annotation.Resource;
 
 @Component
@@ -51,10 +49,11 @@ public class B2BTransferResultConsumer {
                     .build();
 
                 restTemplate.postForObject(
-                    accountServiceUrl + "/withdraw/cancel/",
+                    accountServiceUrl + "/withdraws/cancel/",
                     transactionHistory,
                     Integer.class
                 );
+
             }
             
             transferService.createTransferHistory(transferResult);

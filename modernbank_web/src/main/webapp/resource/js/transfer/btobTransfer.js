@@ -79,7 +79,7 @@ $(function() {
 	function retrieveTransferLimit(cstmId){
 		$.ajax({
 			type : 'GET',
-			url : transferApiUrl+'/transfer-limit/enable/' + cstmId,
+			url : transferApiUrl+'/limits/' + cstmId + "/available",
 			contentType: 'application/json',
 			datatype : 'json',
 			xhrFields : {
@@ -158,7 +158,7 @@ $(function() {
 	function transfer(transferData){
 		$.ajax({
 			type : 'POST',
-			url : transferApiUrl+'/b2b/',
+			url : transferApiUrl+'/external/',
 			contentType: 'application/json',
 			datatype : 'json',
 			data : JSON.stringify(transferData),

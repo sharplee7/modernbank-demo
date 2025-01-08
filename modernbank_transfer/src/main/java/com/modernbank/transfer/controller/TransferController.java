@@ -23,40 +23,40 @@ public class TransferController {
     @Resource(name = "transferService")
     private TransferService transferService;
     
-    @Operation(summary = "당행이체", method = "POST", description = "당행이체")
-    @RequestMapping(method = RequestMethod.POST, path = "/")
+    @Operation(summary = "Internal Bank Transfer", method = "POST", description = "Internal Bank Transfer")
+    @RequestMapping(method = RequestMethod.POST, path = "/internal")
     public TransferHistory transfer(@RequestBody TransferHistory input) throws Exception{
         return transferService.transfer(input);
     }
     
-    /*타행 이체*/
-    @Operation(summary = "타행이체", method = "POST", description = "타행이체")
-    @RequestMapping(method = RequestMethod.POST, path = "/b2b/")
+    // Inter-bank transfer
+    @Operation(summary = "Inter-Bank Transfer", method = "POST", description = "Inter-Bank Transfer")
+    @RequestMapping(method = RequestMethod.POST, path = "/external")
     public Boolean btobTransfer(@RequestBody TransferHistory input) throws Exception{
     	return transferService.btobTransfer(input);
     }
 
-    @Operation(summary = "이체이력조회", method = "GET", description = "이체이력조회")
-    @RequestMapping(method = RequestMethod.GET, path = "/transfer-history/{cstmId}")
+    @Operation(summary = "Retrieve Transfer History", method = "GET", description = "Retrieve Transfer History")
+    @RequestMapping(method = RequestMethod.GET, path = "/history/{cstmId}")
     public List<TransferHistory> retrieveTransferHistoryList(@PathVariable(name = "cstmId") String cstmId) throws Exception{
         List<TransferHistory> transferHistory = transferService.retrieveTransferHistoryList(cstmId);
         return transferHistory;
     }
 
-    @Operation(summary = "이체한도등록", method = "POST", description = "이체한도등록")
-    @RequestMapping(method = RequestMethod.POST, path = "/transfer-limit/")
+    @Operation(summary = "Register Transfer Limit", method = "POST", description = "Register Transfer Limit")
+    @RequestMapping(method = RequestMethod.POST, path = "/limits")
     public Integer createTransferLimit(@RequestBody TransferLimit input) throws Exception{
         return  transferService.createTransferLimit(input);
     }
 
-    @Operation(summary = "이체한도조회", method = "GET", description = "이체한도조회")
-    @RequestMapping(method = RequestMethod.GET, path = "/transfer-limit/{cstmId}")
+    @Operation(summary = "Retrieve Transfer Limit", method = "GET", description = "Retrieve Transfer Limit")
+    @RequestMapping(method = RequestMethod.GET, path = "/limits/{cstmId}")
     public TransferLimit retrieveTransferLimit(@PathVariable(name = "cstmId") String cstmId) throws Exception{
         return transferService.retrieveTransferLimit(cstmId);
     }
 
-    @Operation(summary = "이체가능한도조회", method = "GET", description = "이체가능한도조회")
-    @RequestMapping(method = RequestMethod.GET, path = "/transfer-limit/enable/{cstmId}")
+    @Operation(summary = "Retrieve Available Transfer Limit", method = "GET", description = "Retrieve Available Transfer Limit")
+    @RequestMapping(method = RequestMethod.GET, path = "/limits/{cstmId}/available")
     public TransferLimit retrieveEnableTransferLimit(@PathVariable(name = "cstmId") String cstmId) throws Exception{
         return  transferService.retrieveEnableTransferLimit(cstmId);
     }

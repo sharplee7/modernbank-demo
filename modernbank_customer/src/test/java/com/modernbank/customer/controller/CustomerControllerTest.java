@@ -2,8 +2,6 @@ package com.modernbank.customer.controller;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-import com.modernbank.customer.controller.CustomerController;
-
 @WebMvcTest(controllers = {CustomerController.class}) // Controller만 테스트 
 class CustomerControllerTest {
 /*
@@ -37,7 +35,7 @@ class CustomerControllerTest {
 		// $.cstmId /"$[0].cstmId"
 		
 		mockMvc.perform(MockMvcRequestBuilders
-				.get("/detail/" + cstmId)
+				.get(cstmId + "/details/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("$.cstmId", Matchers.comparesEqualTo(customer.getCstmId())))

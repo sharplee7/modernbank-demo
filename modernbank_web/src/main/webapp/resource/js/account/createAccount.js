@@ -87,7 +87,7 @@ $(function() {
 	function deposit(depositData){
 		$.ajax({
 			type : 'POST',
-			url : accountApiUrl+'/deposit/',
+			url : accountApiUrl+'/deposits/',
 			contentType: 'application/json',
 			datatype : 'json',
 			data : JSON.stringify(depositData),

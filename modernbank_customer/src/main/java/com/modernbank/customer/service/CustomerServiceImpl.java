@@ -1,7 +1,13 @@
 package com.modernbank.customer.service;
 
 import java.util.List;
-
+import com.modernbank.customer.domain.entity.Customer;
+import com.modernbank.customer.domain.repository.CustomerRepository;
+import com.modernbank.customer.exception.BusinessException;
+import com.modernbank.customer.exception.SystemException;
+import com.modernbank.customer.publisher.CustomerProducer;
+import com.modernbank.customer.rest.account.entity.Account;
+import com.modernbank.customer.rest.transfer.entity.TransferLimit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -10,14 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
-import com.modernbank.customer.domain.entity.Customer;
-import com.modernbank.customer.domain.repository.CustomerRepository;
-import com.modernbank.customer.exception.BusinessException;
-import com.modernbank.customer.exception.SystemException;
-import com.modernbank.customer.publisher.CustomerProducer;
-import com.modernbank.customer.rest.account.entity.Account;
-import com.modernbank.customer.rest.transfer.entity.TransferLimit;
 
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -57,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
         // 따라서, Transaction Rollback 발생
         try {
             restTemplate.postForObject(
-                transferServiceUrl + "/transfer-limit/",
+                transferServiceUrl + "/limits/",
                 TransferLimit.builder()
                     .cstmId(cstmId)
                     .oneDyTrnfLmt(500000000L)
@@ -110,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
         // 이체 한도 조회
         try {
             TransferLimit transferLimit = restTemplate.getForObject(
-                transferServiceUrl + "/transfer-limit/{cstmId}",
+                transferServiceUrl + "/limits/{cstmId}",
                 TransferLimit.class,
                 cstmId
             );
@@ -126,7 +124,7 @@ public class CustomerServiceImpl implements CustomerService {
         // 계좌 목록 조회
         try {
             ResponseEntity<List<Account>> response = restTemplate.exchange(
-                accountServiceUrl + "/list/{cstmId}",
+                accountServiceUrl + "/customer/{cstmId}/accounts",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Account>>() {},

@@ -31,7 +31,7 @@ $(function() {
 	function retrieveTransferHistoryList(cstmId){
 		$.ajax({
 			type : 'GET',
-			url : transferApiUrl+'/transfer-history/'+ cstmId,
+			url : transferApiUrl+'/history/'+ cstmId,
 			contentType: 'application/json',
 			datatype : 'json',
 			xhrFields : {

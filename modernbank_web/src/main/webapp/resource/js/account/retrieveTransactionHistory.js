@@ -53,7 +53,7 @@ $(function() {
 	function retrieveTransactionHistory(acntNo){
 		$.ajax({
 			type : 'GET',
-			url : accountApiUrl+'/transaction-history/'+acntNo,
+			url : accountApiUrl+ '/' + acntNo + '/transactions/',
 			contentType: 'application/json',
 			datatype : 'json',
 			xhrFields : {

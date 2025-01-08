@@ -1,13 +1,6 @@
 package com.modernbank.transfer.service;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
 import com.modernbank.transfer.domain.entity.TransferHistory;
 import com.modernbank.transfer.domain.entity.TransferLimit;
 import com.modernbank.transfer.domain.repository.TransferRepository;
@@ -17,6 +10,11 @@ import com.modernbank.transfer.publisher.TransferProducer;
 import com.modernbank.transfer.rest.account.entity.Account;
 import com.modernbank.transfer.rest.account.entity.TransactionHistory;
 import com.modernbank.transfer.rest.account.entity.TransactionResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 
 @Service("transferService")
@@ -49,23 +47,10 @@ public class TransferServiceImpl implements TransferService {
     	return transferRepository.insertTransferHistory(transferHistory);
     }
 
-    // @Override
-    // public List<TransferHistory> retrieveTransferHistoryList(String cstmId) throws Exception {
-    //     // 고객 존재여부 조회
-    //     if(customerFeignClient.existsCustomerId(cstmId) == false)
-    //     	throw new BusinessException("존재하지 않는 아이디입니다.");
-        
-    // 	TransferHistory transferHistory = new TransferHistory();
-    // 	transferHistory.setCstmId(cstmId);
-    	
-    //    	// 이체 이력 조회
-    //     return transferRepository.selectTransferHistoryList(transferHistory);
-    // }
-
     @Override
     public List<TransferHistory> retrieveTransferHistoryList(String cstmId) throws Exception {
         // 고객 존재여부 조회
-        Boolean exists = restTemplate.getForObject(customerServiceUrl + "/exists/{cstmId}", Boolean.class, cstmId);
+        Boolean exists = restTemplate.getForObject(customerServiceUrl + "/{cstmId}/exists", Boolean.class, cstmId);
         if (exists == null || !exists) {
             throw new BusinessException("존재하지 않는 아이디입니다.");
         }
@@ -153,7 +138,7 @@ public class TransferServiceImpl implements TransferService {
         TransactionHistory transaction = new TransactionHistory();
         
         // 출금
-        restTemplate.postForObject(accountServiceUrl + "/withdraw/", 
+        restTemplate.postForObject(accountServiceUrl + "/withdraws/", 
                 transaction.builder()
                     .acntNo(wthdAcntNo)
                     .trnsAmt(trnfAmt)
@@ -162,7 +147,7 @@ public class TransferServiceImpl implements TransferService {
                 TransactionResult.class);
 
         // 입금
-        restTemplate.postForObject(accountServiceUrl + "/deposit/", 
+        restTemplate.postForObject(accountServiceUrl + "/deposits/", 
                 transaction.builder()
                     .acntNo(dpstAcntNo)
                     .trnsAmt(trnfAmt)
@@ -210,7 +195,7 @@ public Boolean btobTransfer(TransferHistory transfer) throws Exception {
     // 출금
     try {
         withdrawResult = restTemplate.postForObject(
-            accountServiceUrl + "/withdraw/",
+            accountServiceUrl + "/withdraws/",
             transaction.builder()
                 .acntNo(wthdAcntNo)
                 .trnsAmt(trnfAmt)

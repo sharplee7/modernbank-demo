@@ -1,10 +1,11 @@
 package com.modernbank.transfer.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
 import java.util.Arrays;
 import java.util.List;
-
+import com.modernbank.transfer.domain.entity.TransferHistory;
+import com.modernbank.transfer.domain.entity.TransferLimit;
+import com.modernbank.transfer.service.TransferService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -14,11 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import com.modernbank.transfer.controller.TransferController;
-import com.modernbank.transfer.domain.entity.TransferHistory;
-import com.modernbank.transfer.domain.entity.TransferLimit;
-import com.modernbank.transfer.service.TransferService;
 @WebMvcTest(controllers = TransferController.class)
 public class TransferControllerTest {
 
@@ -104,7 +100,7 @@ public class TransferControllerTest {
     	BDDMockito.given(transferService.btobTransfer(transferHistory)).willReturn(true);
     	
     	// when (테스트 수행)
-		mockMvc.perform(post("/b2b/")
+		mockMvc.perform(post("/external/")
     			.contentType(MediaType.APPLICATION_JSON)
     			.content("{\"cstmId\":\"1111\","
     					+ "\"seq\":\"1\","
@@ -152,7 +148,7 @@ public class TransferControllerTest {
     	BDDMockito.given(transferService.retrieveTransferHistoryList(cstmId)).willReturn(historyList);
     	
     	// when (테스트 수행)
-		mockMvc.perform(get("/transfer-history/" + cstmId)
+		mockMvc.perform(get("/history/" + cstmId)
     			.contentType(MediaType.APPLICATION_JSON))
     			.andExpect(MockMvcResultMatchers.status().isOk())
     			// Transfer Service 를 Mock 으로 만들어 놨기 때문에 현재 return 값이 null이다. 따라서 cstmId 값이 null 이므로 1111 값과 달라서 error
@@ -189,7 +185,7 @@ public class TransferControllerTest {
     	BDDMockito.given(transferService.retrieveTransferLimit(cstmId)).willReturn(transferLimit);
     	
     	// when (테스트 수행)
-		mockMvc.perform(get("/transfer-limit/" + cstmId)
+		mockMvc.perform(get("/limits/" + cstmId)
     			.contentType(MediaType.APPLICATION_JSON))
     			.andExpect(MockMvcResultMatchers.status().isOk())
     			// Transfer Service 를 Mock 으로 만들어 놨기 때문에 현재 return 값이 null이다. 따라서 cstmId 값이 null 이므로 1111 값과 달라서 error
@@ -216,7 +212,7 @@ public class TransferControllerTest {
     	BDDMockito.given(transferService.retrieveEnableTransferLimit(cstmId)).willReturn(transferLimit);
     	
     	// when (테스트 수행)
-		mockMvc.perform(get("/transfer-limit/enable/" + cstmId)
+		mockMvc.perform(get("/limits/" + cstmId + "/available")
     			.contentType(MediaType.APPLICATION_JSON))
     			.andExpect(MockMvcResultMatchers.status().isOk())
     			// Transfer Service 를 Mock 으로 만들어 놨기 때문에 현재 return 값이 null이다. 따라서 cstmId 값이 null 이므로 1111 값과 달라서 error

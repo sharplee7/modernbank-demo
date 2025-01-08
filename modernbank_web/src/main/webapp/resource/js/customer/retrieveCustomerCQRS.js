@@ -19,7 +19,7 @@ $(function() {
 		var resMsg = "";
 		$.ajax({
 			type : 'GET',
-			url : cqrsApiUrl+'/detail/' + cstmId,
+			url : cqrsApiUrl+ +'/customers/' + cstmId + '/details',
 			contentType: 'application/json',
 			datatype : 'json',
 			xhrFields : {

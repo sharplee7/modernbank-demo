@@ -67,7 +67,7 @@ $(function() {
 	function withdraw(withdrawData){
 		$.ajax({
 			type : 'POST',
-			url : accountApiUrl+'/withdraw/',
+			url : accountApiUrl+'/withdraws/',
 			contentType: 'application/json',
 			datatype : 'json',
 			data : JSON.stringify(withdrawData),
