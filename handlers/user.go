@@ -27,17 +27,6 @@ type ChangePasswordRequest struct {
 	NewPassword string `json:"new_password"` // 새 비밀번호
 }
 
-// CreateUser creates a new user in the database.
-// @Summary Create a new user
-// @Description Create a new user with customer information and login credentials
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param user body CreateUserRequest true "User information"
-// @Success 201 {object} gin.H{"message": "User created successfully"}
-// @Failure 400 {object} gin.H{"error": "Invalid request payload"}
-// @Failure 500 {object} gin.H{"error": "Failed to create user"}
-// @Router /users [post]
 func CreateUser(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req CreateUserRequest
