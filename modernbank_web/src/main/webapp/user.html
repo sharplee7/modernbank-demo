@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form id="registrationForm">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required><br><br>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Register">
+    </form>
+    <p id="message" style="color: red;"></p>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userData = {
+                user_id: document.getElementById('user_id').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+            console.log('User data collected:', userData); // 사용자 데이터 수집
+
+            fetch('http://localhost:8091/modernbank/users/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+                credentials: 'include'
+            })
+            .then(response => {
+                console.log('Server response received:', response.status); // 서버 응답 수신
+                return response.json();
+            })
+            .then(data => {
+                console.log('Parsed response data:', data); // 파싱된 응답 데이터
+                if (data.message === "User created successfully") {
+                    alert('Registration successful, redirecting...');
+                    window.location.href = 'http://localhost:8083/modernbank/customer/welcome';
+                } else {
+                    console.log('Registration failed:', data.error || data.details); // 등록 실패
+                    document.getElementById('message').textContent = data.error || data.details || "An error occurred during registration.";
+                }
+            })
+            .catch((error) => {
+                console.error('Fetch error occurred:', error); // 에러 발생
+                document.getElementById('message').textContent = "An error occurred. Please try again.";
+            });
+        });
+
+        // 폼 로드 시 확인
+        console.log('Registration form loaded and ready'); // 페이지 로드 완료
+    </script>
+</body>
+</html>

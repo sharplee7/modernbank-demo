@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'  // Spring Boot 2.7.x의 최신 버전
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.modernbank'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2021.0.8")  // Spring Boot 2.7.x에 맞는 Spring Cloud 버전
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'javax.servlet:jstl'  // JSTL for JSP
+    implementation 'org.apache.tiles:tiles-jsp:3.0.8'
+    implementation 'org.apache.tiles:tiles-servlet:3.0.8'
+    implementation 'org.apache.tiles:tiles-core:3.0.8'
+    implementation 'org.apache.tiles:tiles-el:3.0.8'
+}
