@@ -39,5 +39,6 @@ func GenerateJWT(userID string) (string, error) {
 }
 
 func SetJWTCookie(c *gin.Context, token string) {
-    c.SetCookie("jwt_token", token, 3600*24, "/", "localhost", false, true)
+    // c.SetCookie("jwt_token", token, 3600*24, "/", "localhost", false, true)
+    c.SetCookie("jwt_token", token, 3600*24, "/", "", false, true)
 }

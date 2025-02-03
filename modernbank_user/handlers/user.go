@@ -120,3 +120,36 @@ func ChangePassword(db *sql.DB) gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
 	}
 }
+
+// GetUsername returns the username for a given user_id
+func GetUsername(db *sql.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        userID := c.Param("user_id") // URL에서 user_id 파라미터 추출
+
+        // 데이터베이스에서 username 조회
+        var username string
+        err := db.QueryRow("SELECT username FROM tb_user WHERE user_id = $1", userID).Scan(&username)
+        
+        if err != nil {
+            if err == sql.ErrNoRows {
+                // 사용자를 찾을 수 없는 경우
+                c.JSON(http.StatusNotFound, gin.H{
+                    "error": "User not found",
+                })
+                return
+            }
+            // 기타 데이터베이스 오류
+            c.JSON(http.StatusInternalServerError, gin.H{
+                "error": "Failed to retrieve username",
+                "details": err.Error(),
+            })
+            return
+        }
+
+        // 성공적으로 username을 찾은 경우
+        c.JSON(http.StatusOK, gin.H{
+            "user_id": userID,
+            "username": username,
+        })
+    }
+}
