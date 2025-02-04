@@ -2,10 +2,8 @@ package com.modernbank.customer.security;
 
 import java.util.Base64;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -16,6 +14,7 @@ public class JwtValidator {
     private String jwtSecret;
 
     public boolean validateToken(String token) {
+        System.out.println("----> token: " + token);
         try {
             byte[] decodedKey = Base64.getDecoder().decode(jwtSecret);
             Claims claims = Jwts.parserBuilder()

@@ -20,8 +20,8 @@ type CreateUserRequest struct {
 
 type ChangePasswordRequest struct {
 	//UserID      string `json:"user_id"`      // 사용자 ID
-	OldPassword string `json:"old_password"` // 기존 비밀번호
-	NewPassword string `json:"new_password"` // 새 비밀번호
+	OldPassword string `json:"old_password"`   // 기존 비밀번호
+	NewPassword string `json:"new_password"`   // 새 비밀번호
 }
 
 func CreateUser(db *sql.DB) gin.HandlerFunc {
